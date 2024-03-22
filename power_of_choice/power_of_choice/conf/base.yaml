@@ -1,0 +1,58 @@
+---
+# this is the config that will be loaded as default by main.py
+# Please follow the provided structure (this will ensuring all baseline follow
+# a similar configuration structure and hence be easy to customise)
+
+num_clients: 100
+num_rounds: 200
+batch_size: 32
+local_epochs: 4
+fraction_samples: 1.0
+
+epochs_min: 1 # minimum number of epochs
+epochs_max: 4 # maximum number of epochs
+batch_size_min: 32 # minimum batch size
+batch_size_max: 128 # maximum batch size
+fraction_samples_min: 0.5 # minimum fraction of samples
+fraction_samples_max: 1.0 # maximum fraction of samples
+
+local_epochs_default: 2 # number of local epochs
+batch_size_default: 32 # batch size
+fraction_samples_default: 1.0 
+
+# Which parameters to vary, NOTE: only one of these can be True
+local_epochs_varying: False # whether to vary local epochs
+batch_size_varying: False # whether to vary batch size
+fraction_samples_varying: True # whether to vary fraction of samples
+
+comp_time: 5 # computation time in seconds for each client
+
+seed: 39
+alpha: 2
+is_cnn: False
+
+client_resources:
+  num_cpus: 1
+  num_gpus: 0
+
+optimizer: "so"
+
+dataset:
+  dataset: "mnist"
+
+# variant of the strategy: "rand" for FedAvg strategy ,"base", "cpow" for cpow, "rpow" for rpow
+variant: "base"
+b: 64
+
+strategy:
+  _target_: power_of_choice.strategy.PowerOfChoice
+  d: 20
+  ck: 10
+
+client:
+  mean_ips: 10
+  var_ips: 5
+
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}/${dataset.dataset}_${variant}_d${strategy.d}_CK${strategy.ck}
